@@ -1,0 +1,34 @@
+Foundation Filter 
+
+-- Project Description
+The Foundation Filter is a Raspbian-hosted containerized program that utilizes a web camera feed to present
+a live view on a television via HDMI with detected faces and a "filter" overlay stamped over the detected faces.
+
+-- Project Architecture
+The Foundation Filter is a locally-hosted service to be run as a container in Docker. The container service will 
+utilize the following:
+1. OpenCV - Capturing frames from the live feed 
+2. Mediapipe (optional if there is already a face detector on YOLO) - Pose estimation on face
+3. YOLOv8 - For detecting faces in the feed
+4. React - Front end for app
+5. Chromium - Browser for running the app
+
+For automatically running the container in device startup, we create a systemd target that will execute the container
+initialization and operation. 
+
+-- Developer Operations
+All development testing and eventual deployment will result in Docker containers. The Docker containers
+must be able to expose a port where the front end and the inferences can be shown in the live feed.
+
+-- Program Logic
+1. Housekeeping Step
+- The program tests whether the live feed and the inference engine is working
+2. Runtime loop 
+- Receive frames at 24fps
+- Per frame, perform an inference to find face coordinates (if any)
+  - There are faces, place the filter on the available coordinates
+  - If none, skip the inference
+3. Shutdown
+- The program will shut down if the device itself shuts down
+
+
