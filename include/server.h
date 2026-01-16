@@ -6,6 +6,9 @@
 #define DHCP_SERVER_H
 
 #include <iostream>
+#include <cstdint>
+#include <ctime>
+#include <string>
 #include <unordered_map>
 
 class dhcp_session {

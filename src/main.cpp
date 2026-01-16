@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
         uint8_t buf[MAXSIZE];
         ssize_t bytes_serialized = dp.serialize(buf, MAXSIZE);
 
-        ssize_t bytes_sent = sendto(sockfd, (const char*)buf, strlen(msg), 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        ssize_t bytes_sent = sendto(sockfd, (const char*)buf, bytes_serialized, 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
         if (bytes_sent < 0) {
             perror("sendto failed");
