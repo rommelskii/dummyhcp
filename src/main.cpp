@@ -1,14 +1,8 @@
-//
-// Created by MJ Ronduen on 1/16/26.
-//
-
 #include <iostream>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
-
-// ./dhcp (server | client)
+#include <cstring>  // REQUIRED for memset, memcpy, strncmp
 
 #define MAXLINE 1500
 #define PORT 8080
@@ -16,64 +10,89 @@
 int main(int argc, char** argv) {
     const char* ARG_SERVER = "server";
     const char* ARG_CLIENT = "client";
+
     if (argc < 2) {
-        std::cerr << "Error: incorrect parameters";
-        exit(EXIT_FAILURE);
+        std::cerr << "Usage: " << argv[0] << " [server|client]" << std::endl;
+        return EXIT_FAILURE;
     }
+
+    // Safely copy the argument to our buffer
     char buf[MAXLINE];
-    std::memcpy(buf, argv[1], MAXLINE);
+    std::memset(buf, 0, MAXLINE);
+    std::strncpy(buf, argv[1], MAXLINE - 1);
 
-    if ( strncmp(buf, ARG_SERVER, MAXLINE) == 0 ) {
-        std::cout << "Entering server mode\n";
+    if (std::strncmp(buf, ARG_SERVER, strlen(ARG_SERVER)) == 0) {
+        std::cout << "Entering server mode on port " << PORT << "..." << std::endl;
+        
         int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-        if (sockfd == -1) {
+        if (sockfd < 0) {
             perror("socket failed");
-        }
-        sockaddr_in servaddr, cliaddr;
-        memset(&servaddr, 0, sizeof(servaddr));
-        memset(&cliaddr, 0, sizeof(cliaddr));
-
-        servaddr.sin_family = AF_INET;
-        servaddr.sin_port = htons(PORT);
-        servaddr.sin_addr.s_addr = INADDR_ANY;
-
-        if ( bind(sockfd, (const struct sockaddr*) &servaddr, sizeof(servaddr)) < 0 ) {
-            perror("bind failed");
-            exit(EXIT_FAILURE);
-        }
-
-        socklen_t len = sizeof(cliaddr);
-        int n = recvfrom(sockfd, buf, MAXLINE, 0, (struct sockaddr*) &cliaddr, &len);
-        buf[n] = '\0';
-        std::cout << "Received: " << buf << std::endl;
-    }
-    else if ( strncmp(buf, ARG_CLIENT, MAXLINE) == 0 ) {
-        std::cout << "Entering client mode\n";
-        int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-        if (sockfd == -1) {
-            perror("socket failed");
-            exit(EXIT_FAILURE);
-        }
-
-        int broadcastEnable = 1;
-        int ret = setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, (const char*)&broadcastEnable, sizeof(broadcastEnable));
-        if (ret < 0) {
-            perror("setsockopt failed");
-            exit(EXIT_FAILURE);
+            return EXIT_FAILURE;
         }
 
         sockaddr_in servaddr, cliaddr;
-
         std::memset(&servaddr, 0, sizeof(servaddr));
         std::memset(&cliaddr, 0, sizeof(cliaddr));
 
         servaddr.sin_family = AF_INET;
         servaddr.sin_port = htons(PORT);
+        servaddr.sin_addr.s_addr = INADDR_ANY;
+
+        if (bind(sockfd, (const struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
+            perror("bind failed");
+            close(sockfd);
+            return EXIT_FAILURE;
+        }
+
+        std::cout << "Waiting for data..." << std::endl;
+        socklen_t len = sizeof(cliaddr);
+        // Receive MAXLINE-1 to leave room for the null terminator
+        ssize_t n = recvfrom(sockfd, buf, MAXLINE - 1, 0, (struct sockaddr*)&cliaddr, &len);
+        
+        if (n >= 0) {
+            buf[n] = '\0';
+            std::cout << "Received from " << inet_ntoa(cliaddr.sin_addr) << ": " << buf << std::endl;
+        }
+        
+        close(sockfd);
+    } 
+    else if (std::strncmp(buf, ARG_CLIENT, strlen(ARG_CLIENT)) == 0) {
+        std::cout << "Entering client mode (broadcasting)..." << std::endl;
+        
+        int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+        if (sockfd < 0) {
+            perror("socket failed");
+            return EXIT_FAILURE;
+        }
+
+        int broadcastEnable = 1;
+        if (setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable)) < 0) {
+            perror("setsockopt failed");
+            close(sockfd);
+            return EXIT_FAILURE;
+        }
+
+        sockaddr_in servaddr;
+        std::memset(&servaddr, 0, sizeof(servaddr));
+
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port = htons(PORT);
         servaddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
 
-        ssize_t bytes_sent = sendto(sockfd, buf, MAXLINE, 0, (struct sockaddr*) &servaddr, sizeof(servaddr));
+        const char* msg = "DHCP_DISCOVER_DUMMY";
+        ssize_t bytes_sent = sendto(sockfd, msg, strlen(msg), 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
+
+        if (bytes_sent < 0) {
+            perror("sendto failed");
+        } else {
+            std::cout << "Broadcasted " << bytes_sent << " bytes." << std::endl;
+        }
 
         close(sockfd);
+    } 
+    else {
+        std::cerr << "Invalid argument. Use 'server' or 'client'." << std::endl;
     }
+
     return 0;
 }
