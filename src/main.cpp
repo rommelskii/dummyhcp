@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <cstring>  // REQUIRED for memset, memcpy, strncmp
 #include "dhcp_packet.h"
+#include "server.h"
 
 #define MAXLINE 1500
 #define PORT 8080
@@ -81,7 +82,7 @@ int main(int argc, char** argv) {
         servaddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
 
         // begin payload
-        uint8 fake_mac[8] = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
+        uint8_t fake_mac[8] = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
         dhcp_packet dp;
         dp.build_client_header(inet_addr("0.0.0.0"), inet_addr("192.168.100.1"), generate_xid(), fake_mac);
         dp.options[53].push_back(1);
