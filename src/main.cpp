@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cstring>  // REQUIRED for memset, memcpy, strncmp
+#include "dhcp_packet.h"
 
 #define MAXLINE 1500
 #define PORT 8080
@@ -79,8 +80,17 @@ int main(int argc, char** argv) {
         servaddr.sin_port = htons(PORT);
         servaddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
 
-        const char* msg = "DHCP_DISCOVER_DUMMY";
-        ssize_t bytes_sent = sendto(sockfd, msg, strlen(msg), 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        // begin payload
+        uint8 fake_mac[8] = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
+        dhcp_packet dp;
+        dp.build_client_header(inet_addr("0.0.0.0"), inet_addr("192.168.100.1"), generate_xid(), fake_mac);
+        dp.options[53].push_back(1);
+        dp.options[53].push_back(1);
+
+        uint8_t buf[MAXSIZE];
+        ssize_t bytes_serialized = dp.serialize(buf, MAXSIZE);
+
+        ssize_t bytes_sent = sendto(sockfd, (const char*)buf, strlen(msg), 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
         if (bytes_sent < 0) {
             perror("sendto failed");
