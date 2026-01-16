@@ -21,7 +21,6 @@ void dhcp_packet::packet_from_stream(uint8_t buffer[MAXSIZE], ssize_t bytes_rece
     uint8_t *options_start = buffer + sizeof(header); // option field starts after header
     uint8_t *current = options_start;
 
-    current += 4; // skip 4 bytes (magic cookie)
     while (current < (buffer + bytes_received)) {
         //buffer + bytes_received is end of buffered packet itself
         uint8_t type = *current;
