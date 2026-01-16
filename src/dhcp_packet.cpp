@@ -9,6 +9,7 @@
 #include <random>
 #include <vector>
 #include <sstream>
+#include <cstring>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
