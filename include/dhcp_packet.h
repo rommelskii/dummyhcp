@@ -7,6 +7,9 @@
 
 #define MAXSIZE 1500
 
+#include <cstdint>
+#include <string>
+#include <sys/types.h>
 #include <unordered_map>
 #include <vector>
 
