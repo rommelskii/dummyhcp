@@ -68,26 +68,86 @@ void dhcp_packet::build_client_header(uint32_t ciaddr, uint32_t giaddr, uint32_t
 
     this->header = dp;
 }
+ssize_t dhcp_packet::serialize(uint8_t buf[], ssize_t max_len) {
+    // Ensure we don't overflow the buffer
+    if (max_len < sizeof(dhcp_header) + 4) return -1;
 
-ssize_t dhcp_packet::serialize(uint8_t buf[MAXSIZE], ssize_t max_len) {
-    if (max_len > sizeof(dhcp_packet) + 4) return -1;
-    //copy the dhcp header from the class
-    ssize_t offset = 0;
-    std::memcpy(buf, &this->header, sizeof(this->header));
-    offset += sizeof(dhcp_packet);
+    // Create a temporary header to hold network-ordered values
+    dhcp_header net_hdr = this->header;
 
-    //iterate over the options map in the class
-    for (const auto& [tag, value] : this->options) {
-        if (offset + 2 > max_len) return -1; // prevents overflow from the value field
+    // Convert multi-byte fields to Network Byte Order
+    net_hdr.xid    = htonl(this->header.xid);
+    net_hdr.secs   = htons(this->header.secs);
+    net_hdr.flags  = htons(this->header.flags);
+    net_hdr.ciaddr = htonl(this->header.ciaddr);
+    net_hdr.yiaddr = htonl(this->header.yiaddr);
+    net_hdr.siaddr = htonl(this->header.siaddr);
+    net_hdr.giaddr = htonl(this->header.giaddr);
 
-        buf[offset++] = tag;                   // tag value
-        buf[offset++] = static_cast<uint8_t>(value.size()); // length value
+    // Copy the converted header to the buffer
+    std::memcpy(buf, &net_hdr, sizeof(dhcp_header));
 
-        std::memcpy(buf + offset, value.data(), value.size()); // copy the value alongside its length
-        offset += static_cast<ssize_t>(value.size());
+    // Don't forget the Magic Cookie (must be 0x63825363 in network order)
+    uint32_t cookie = htonl(0x63825363);
+    size_t offset = sizeof(dhcp_header);
+    std::memcpy(buf + offset, &cookie, 4);
+
+    for (auto const& [type, value] : this->options) {
+        if (offset + 2 + value.size() > (size_t)max_len) return - 1;
+
+        buf[offset++] = type;
+        buf[offset++] = (uint8_t)value.size();
+
+        std::memcpy(buf + offset, value.data(), value.size());
+        offset += value.size();
     }
 
-    return offset;
+    if (offset < (size_t)max_len) {
+        buf[offset++] = 0xFF;
+    } else {
+        return -1;
+    }
+
+    return (ssize_t)offset;
+}
+
+void dhcp_packet::print() {
+    std::cout << "\n========= DHCP PACKET CONTENTS =========" << std::endl;
+
+    // 1. Print Basic Header Info
+    std::cout << "OP:    " << (int)header.op << (header.op == 1 ? " (BOOTREQUEST)" : " (BOOTREPLY)") << std::endl;
+    std::cout << "XID:   0x" << std::hex << ntohl(header.xid) << std::dec << std::endl;
+
+    // 2. Print IP Addresses
+    // We use in_addr struct so inet_ntoa can format the uint32_t
+    struct in_addr addr;
+
+    addr.s_addr = header.ciaddr; // Already in network order if filled correctly
+    std::cout << "CIADDR: " << inet_ntoa(addr) << std::endl;
+
+    addr.s_addr = header.yiaddr;
+    std::cout << "YIADDR: " << inet_ntoa(addr) << std::endl;
+
+    addr.s_addr = header.giaddr;
+    std::cout << "GIADDR: " << inet_ntoa(addr) << std::endl;
+
+    // 3. Print MAC Address (CHADDR)
+    std::cout << "CHADDR: ";
+    for(int i = 0; i < 6; ++i) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)header.chaddr[i] << (i < 5 ? ":" : "");
+    }
+    std::cout << std::dec << std::setfill(' ') << std::endl;
+
+    // 4. Print Options
+    std::cout << "OPTIONS (" << options.size() << " found):" << std::endl;
+    for (auto const& [type, value] : options) {
+        std::cout << "  [Type " << (int)type << "] Len: " << value.size() << " | Data: ";
+        for (uint8_t byte : value) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)byte << " ";
+        }
+        std::cout << std::dec << std::endl;
+    }
+    std::cout << "========================================" << std::endl;
 }
 
 std::string mac_to_string(uint8_t mac[16]) {

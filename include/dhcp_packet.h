@@ -54,6 +54,7 @@ public:
 
     void packet_from_stream(uint8_t buffer[MAXSIZE], ssize_t bytes_received);
     void build_client_header(uint32_t ciaddr, uint32_t giaddr, uint32_t xid, uint8_t mac[8]);
+    void print();
     ssize_t serialize(uint8_t buf[], ssize_t max_len);
 };
 
