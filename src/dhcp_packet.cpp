@@ -43,6 +43,8 @@ void dhcp_packet::packet_from_stream(uint8_t buffer[MAXSIZE], ssize_t bytes_rece
 
         current += (2 + len);
     }
+
+    // revert all network endianness to host order
 }
 
 void dhcp_packet::build_client_header(uint32_t ciaddr, uint32_t giaddr, uint32_t xid, uint8_t mac[8]) {
@@ -121,13 +123,13 @@ void dhcp_packet::print() {
     // We use in_addr struct so inet_ntoa can format the uint32_t
     struct in_addr addr;
 
-    addr.s_addr = header.ciaddr; // Already in network order if filled correctly
+    addr.s_addr = htonl(header.ciaddr); // Already in network order if filled correctly
     std::cout << "CIADDR: " << inet_ntoa(addr) << std::endl;
 
-    addr.s_addr = header.yiaddr;
+    addr.s_addr = htonl(header.yiaddr);
     std::cout << "YIADDR: " << inet_ntoa(addr) << std::endl;
 
-    addr.s_addr = header.giaddr;
+    addr.s_addr = htonl(header.giaddr);
     std::cout << "GIADDR: " << inet_ntoa(addr) << std::endl;
 
     // 3. Print MAC Address (CHADDR)
