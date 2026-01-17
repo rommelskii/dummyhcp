@@ -2,6 +2,7 @@
 #define PACKET_FIXTURES_H
 
 #include "packet.h"
+#include <arpa/inet.h>
 #include <gtest/gtest.h>
 
 class PacketInitialization : public ::testing::Test {

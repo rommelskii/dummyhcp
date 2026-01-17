@@ -29,22 +29,40 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(
-  test_main
-  tests/test_main.cpp
+  initialization_tests 
+  tests/initialization_tests.cpp
   src/packet.cpp
 )
-target_include_directories(test_main PRIVATE 
+add_executable(
+  header_tests
+  tests/header_tests.cpp
+  src/packet.cpp
+)
+target_include_directories(initialization_tests PRIVATE 
+    tests/fixtures
+    include    
+    src       
+)
+target_include_directories(header_tests PRIVATE 
     tests/fixtures
     include    
     src       
 )
 target_link_libraries(
-  test_main
+  initialization_tests 
   GTest::gtest_main
 )
-set_target_properties(test_main PROPERTIES
+target_link_libraries(
+  header_tests
+  GTest::gtest_main
+)
+set_target_properties(initialization_tests PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
+)
+set_target_properties(header_tests PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
 )
 include(GoogleTest)
-gtest_discover_tests(test_main)
+gtest_discover_tests(initialization_tests)
+gtest_discover_tests(header_tests)
 
