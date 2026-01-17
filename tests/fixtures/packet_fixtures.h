@@ -23,9 +23,9 @@ protected:
   const uint32_t    yiaddr        = inet_addr("0.1.0.0");    
   const uint32_t    siaddr        = inet_addr("0.0.1.0");     
   const uint32_t    giaddr        = inet_addr("192.168.100.69");      
-  uint8_t     chaddr[16]    = {0};   
-  uint8_t     sname[64]     = {0};     
-  uint8_t     file[128]     = {0};      
+        uint8_t     chaddr[16]    = {0};   
+        uint8_t     sname[64]     = {0};     
+        uint8_t     file[128]     = {0};      
   const uint32_t    magic_cookie  = 0xAAAAFFFF;   
 
   void SetUp() override {
