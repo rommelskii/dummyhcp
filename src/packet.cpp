@@ -21,7 +21,7 @@ void dhcp_packet::build_header(uint8_t op, uint32_t xid, uint16_t secs, uint16_t
   this->header.siaddr = siaddr;
   this->header.giaddr = giaddr;
 
-  std::memcpy(chaddr, this->header.chaddr, (size_t)sizeof(this->header.chaddr));
+  std::memcpy(this->header.chaddr, chaddr, (size_t)sizeof(this->header.chaddr));
   std::memset(this->header.sname, 0, sizeof(this->header.sname));
   std::memset(this->header.file, 0, sizeof(this->header.file));
 
@@ -29,18 +29,16 @@ void dhcp_packet::build_header(uint8_t op, uint32_t xid, uint16_t secs, uint16_t
 }
 
 void dhcp_packet::preflight_order_change() {
-  dhcp_header temp_dh = this->header;
-  temp_dh.xid = htonl(temp_dh.xid);
-  temp_dh.secs = htonl(temp_dh.secs);
-  temp_dh.flags = htonl(temp_dh.flags);
-  temp_dh.magic_cookie = htonl(temp_dh.magic_cookie);
-  this->header = temp_dh;
+  this->header.xid = htonl(this->header.xid);
+  this->header.secs = htons(this->header.secs);
+  this->header.flags = htons(this->header.flags);
+  this->header.magic_cookie = htonl(this->header.magic_cookie);
 }
 
 ssize_t dhcp_packet::serialize(uint8_t buf[], size_t max_len) {
   this->preflight_order_change(); //change appropriate packet fields to network order
   // begin copying header to byte buffer
-  std::memcpy(&this->header, buf, sizeof(this->header));
+  std::memcpy(buf, &this->header, sizeof(this->header));
   size_t offset = sizeof(this->header); // create pointer after header
   uint32_t magic_cookie = this->header.magic_cookie;
   std::memcpy(buf+offset, &magic_cookie, sizeof(magic_cookie));
@@ -83,7 +81,7 @@ ssize_t dhcp_packet::deserialize(uint8_t buf[], size_t bytes_received) {
       break;
     }
     for (int i=0; i<value_length; ++i) {
-      this->options[*current].push_back(*current + 2 + i);
+      this->options[*current].push_back(*(current + 2 + i));
     }
 
     current += (2 + value_length);

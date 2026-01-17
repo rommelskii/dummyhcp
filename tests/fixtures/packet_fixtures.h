@@ -2,6 +2,7 @@
 #define PACKET_FIXTURES_H
 
 #include "packet.h"
+#include <iostream>
 #include <arpa/inet.h>
 #include <gtest/gtest.h>
 
@@ -12,6 +13,7 @@ protected:
 
 class PacketHeaderBuild : public ::testing::Test {
 protected:
+  //header building 
   dhcp_packet dp;
   const uint8_t     op            = 1;     
   const uint8_t     htype         = 1;   
@@ -27,7 +29,13 @@ protected:
         uint8_t     chaddr[16]    = {0};   
         uint8_t     sname[64]     = {0};     
         uint8_t     file[128]     = {0};      
-  const uint32_t    magic_cookie  = 0xAAAAFFFF;   
+  const uint32_t    magic_cookie  = 0x63825363;   //always
+
+  // preflight checks
+  const uint32_t net_xid = htonl(xid);
+  const uint16_t net_secs = htons(secs);
+  const uint16_t net_flags = htons(flags);
+  const uint32_t net_magic_cookie = htonl(magic_cookie);
 
   void SetUp() override {
     dp.build_header(op, xid, secs, flags, ciaddr, yiaddr, siaddr, giaddr, chaddr);

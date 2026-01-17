@@ -41,3 +41,10 @@ TEST_F(PacketHeaderBuild, PacketHeaderFileCheck) {
     EXPECT_EQ(dp.header.file[i], file[i]);
   }
 }
+TEST_F(PacketHeaderBuild, PacketHeaderPreflightCheck) {
+  dp.preflight_order_change();
+  EXPECT_EQ(dp.header.xid, net_xid);
+  EXPECT_EQ(dp.header.secs, net_secs);
+  EXPECT_EQ(dp.header.flags, net_flags);
+  EXPECT_EQ(dp.header.magic_cookie, net_magic_cookie);
+}
