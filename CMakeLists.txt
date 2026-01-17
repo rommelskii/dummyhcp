@@ -9,8 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # when you add a new file to the folder without a re-configure.
 set(SOURCES
     src/main.cpp
-    src/dhcp_packet.cpp
-    # Add new .cpp files here as you create them
+    src/packet.cpp
 )
 
 # 2. Define the executable using the variable

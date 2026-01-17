@@ -1,0 +1,3 @@
+/Users/mels/projects/dummyhcp/CMakeFiles/dhcp.dir
+/Users/mels/projects/dummyhcp/CMakeFiles/edit_cache.dir
+/Users/mels/projects/dummyhcp/CMakeFiles/rebuild_cache.dir
