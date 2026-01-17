@@ -1,29 +1,27 @@
-# 1. Set the minimum version of CMake required
 cmake_minimum_required(VERSION 3.10)
-
-# 2. Define the project name and version
 project(dhcp VERSION 1.0)
 
-# 3. Specify the C++ standard (Modern C++ is recommended)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 4. Include directories (in case you add .h files in src later)
-include_directories(src)
+# 1. Explicitly list your source files
+# This is preferred over GLOB because CMake cannot always detect 
+# when you add a new file to the folder without a re-configure.
+set(SOURCES
+    src/main.cpp
+    src/dhcp_packet.cpp
+    # Add new .cpp files here as you create them
+)
 
-# 5. Locate the source files
-# Instead of listing files manually, we tell CMake to look in /src
-file(GLOB SOURCES "src/*.cpp")
+# 2. Define the executable using the variable
+add_executable(dhcp ${SOURCES})
 
-# 6. Define the executable and its source files
-add_executable(dhcp ${SOURCES}
-        src/dhcp_packet.cpp
-        include/dhcp_packet.h
-        include/server.h
-        src/main.cpp
-        src/server.cpp)
+# 3. Handle include directories properly
+# This tells the compiler where to look for your .h files.
+target_include_directories(dhcp PRIVATE 
+    include    # For your custom headers
+    src        # In case you have headers sitting next to .cpp files
+)
 
-target_include_directories(dhcp PRIVATE include)
-
-# 7. Provide a message when configuration is successful
-message(STATUS "Project configured for ${CMAKE_SYSTEM_NAME}")
+# 4. Success message
+message(STATUS "DHCP Project configured for ${CMAKE_SYSTEM_NAME}")
