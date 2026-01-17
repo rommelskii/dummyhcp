@@ -33,10 +33,6 @@ void dhcp_packet::preflight_order_change() {
   temp_dh.xid = htonl(temp_dh.xid);
   temp_dh.secs = htonl(temp_dh.secs);
   temp_dh.flags = htonl(temp_dh.flags);
-  temp_dh.ciaddr = htonl(temp_dh.ciaddr);
-  temp_dh.yiaddr = htonl(temp_dh.yiaddr);
-  temp_dh.siaddr = htonl(temp_dh.siaddr);
-  temp_dh.giaddr = htonl(temp_dh.giaddr);
   temp_dh.magic_cookie = htonl(temp_dh.magic_cookie);
   this->header = temp_dh;
 }
