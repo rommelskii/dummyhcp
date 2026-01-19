@@ -43,6 +43,11 @@ add_executable(
   tests/serialization_tests.cpp
   src/packet.cpp
 )
+add_executable(
+  option_tests 
+  tests/option_tests.cpp
+  src/packet.cpp
+)
 target_include_directories(initialization_tests PRIVATE 
     tests/fixtures
     include    
@@ -54,6 +59,11 @@ target_include_directories(header_tests PRIVATE
     src       
 )
 target_include_directories(serialization_tests PRIVATE 
+    tests/fixtures
+    include    
+    src       
+)
+target_include_directories(option_tests PRIVATE 
     tests/fixtures
     include    
     src       
@@ -70,6 +80,10 @@ target_link_libraries(
   serialization_tests 
   GTest::gtest_main
 )
+target_link_libraries(
+  option_tests 
+  GTest::gtest_main
+)
 set_target_properties(initialization_tests PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
 )
@@ -79,8 +93,12 @@ set_target_properties(header_tests PROPERTIES
 set_target_properties(serialization_tests PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
 )
+set_target_properties(option_tests PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
+)
 include(GoogleTest)
 gtest_discover_tests(initialization_tests)
 gtest_discover_tests(header_tests)
 gtest_discover_tests(serialization_tests)
+gtest_discover_tests(option_tests)
 
