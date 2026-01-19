@@ -63,7 +63,7 @@ ssize_t dhcp_packet::deserialize(uint8_t buf[], size_t bytes_received) {
     return -1;
   }
 
-  std::memcpy(buf, &(this->header), sizeof(this->header)); // extract header from bytes to header
+  std::memcpy(&(this->header), buf, sizeof(this->header)); // extract header from bytes to header
 
   uint8_t* options_start = buf + sizeof(this->header); // pointer where options field starts
   uint8_t* options_end = buf + bytes_received;
@@ -90,6 +90,8 @@ ssize_t dhcp_packet::deserialize(uint8_t buf[], size_t bytes_received) {
   if (current != options_end) {
     return -1;
   }
+
+  this->preflight_order_change(); //change appropriate packet fields back to host order
 
   return bytes_received;
 }
