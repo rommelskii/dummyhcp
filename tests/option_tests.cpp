@@ -68,7 +68,7 @@ TEST_F(PacketOptionsBuild, DhcpOfferTest) {
   ASSERT_EQ(op53_vec[0], VALUE_53_OFFER);
 
   offer_packet.pack_ip(op54_vec, SERVER_IP);
-  ASSERT_EQ(op54_vec.size(), SERVER_IP.size());
+  ASSERT_EQ(op54_vec.size(), PACK32_TO_8);
 
   const size_t PACK32_TO_8 = sizeof(LEASE_TIME) / sizeof(uint8_t);
   offer_packet.pack_time(op51_vec, LEASE_TIME);
