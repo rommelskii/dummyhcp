@@ -115,7 +115,7 @@ TEST_F(PacketOptionsBuild, DhcpRequestTest) {
     op61_vec.push_back(x);
   }
   op61_vec.push_back(ETHERNET_TAG); // request list size + 1
-  ASSERT_EQ(op61_vec.size(), REQUEST_REQUEST_LIST.size() + 1);
+  ASSERT_EQ(op61_vec.size(), CLIENT_ID.size() + 1);
 }
 
 TEST_F(PacketOptionsBuild, DhcpAcknowledgeTest) {
