@@ -81,7 +81,9 @@ protected:
   const uint32_t    RENEWAL_TIME = 86400;
   const uint32_t    REBINDING_TIME = 86400;
 
-  const uint8_t    ETHERNET_TAG = 0x01;
+  const uint8_t     ETHERNET_TAG = 0x01;
+
+  const size_t      PACK32_TO_8 = sizeof(uint32_t) / sizeof(uint8_t); 
 
   std::vector<uint8_t> DISCOVER_REQUEST_LIST = {OPTION_1, OPTION_3, OPTION_6, OPTION_15};
   std::vector<uint8_t> OFFER_REQUEST_LIST = {OPTION_1, OPTION_3, OPTION_6};
