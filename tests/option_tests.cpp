@@ -22,8 +22,8 @@ TEST_F(PacketOptionsBuild, DhcpDiscoverTest) {
   //check option vectors exist
   auto op53_vec = options[OPTION_53];
   auto op55_vec = options[OPTION_55];
-  ASSERT_NEQ(op53_vec, options.end());
-  ASSERT_NEQ(op55_vec, options.end());
+  ASSERT_NE(op53_vec, options.end());
+  ASSERT_NE(op55_vec, options.end());
 
   //insert payload and check
   op53_vec.push_back(VALUE_53_DISCOVER);
@@ -56,12 +56,12 @@ TEST_F(PacketOptionsBuild, DhcpOfferTest) {
   auto op58_vec = options[OPTION_58];
   auto op59_vec = options[OPTION_59];
   auto op55_vec = options[OPTION_55];
-  ASSERT_NEQ(op53_vec, options.end());
-  ASSERT_NEQ(op54_vec, options.end());
-  ASSERT_NEQ(op51_vec, options.end());
-  ASSERT_NEQ(op58_vec, options.end());
-  ASSERT_NEQ(op59_vec, options.end());
-  ASSERT_NEQ(op55_vec, options.end());
+  ASSERT_NE(op53_vec, options.end());
+  ASSERT_NE(op54_vec, options.end());
+  ASSERT_NE(op51_vec, options.end());
+  ASSERT_NE(op58_vec, options.end());
+  ASSERT_NE(op59_vec, options.end());
+  ASSERT_NE(op55_vec, options.end());
 
 
   op53_vec.push_back(VALUE_53_OFFER);
@@ -105,20 +105,20 @@ TEST_F(PacketOptionsBuild, DhcpRequestTest) {
   auto op54_vec = options[OPTION_54];
   auto op55_vec = options[OPTION_55];
   auto op61_vec = options[OPTION_61];
-  ASSERT_NEQ(op53_vec, options.end());
-  ASSERT_NEQ(op50_vec, options.end());
-  ASSERT_NEQ(op54_vec, options.end());
-  ASSERT_NEQ(op55_vec, options.end());
-  ASSERT_NEQ(op61_vec, options.end());
+  ASSERT_NE(op53_vec, options.end());
+  ASSERT_NE(op50_vec, options.end());
+  ASSERT_NE(op54_vec, options.end());
+  ASSERT_NE(op55_vec, options.end());
+  ASSERT_NE(op61_vec, options.end());
 
   op53_vec.push_back(VALUE_53_REQUEST);
   ASSERT_EQ(op53_vec[0], VALUE_53_REQUEST);
 
   request_packet.pack_ip(op50_vec, REQUESTED_IP);
-  ASSERT_EQ(op50_vec.size(), REQUESTED_IP.size());
+  ASSERT_EQ(op50_vec.size(), PACK32_TO_8);
 
   request_packet.pack_ip(op54_vec, SERVER_IP);
-  ASSERT_EQ(op54_vec.size(), SERVER_IP.size());
+  ASSERT_EQ(op54_vec.size(), PACK32_TO_8);
 
   for (auto x : REQUEST_REQUEST_LIST) {
     op55_vec.push_back(x);
@@ -150,24 +150,24 @@ TEST_F(PacketOptionsBuild, DhcpAcknowledgeTest) {
   auto op54_vec = options[OPTION_54];
   auto op1_vec = options[OPTION_1];
   auto op3_vec = options[OPTION_3];
-  ASSERT_NEQ(op53_vec, options.end());
-  ASSERT_NEQ(op51_vec, options.end());
-  ASSERT_NEQ(op54_vec, options.end());
-  ASSERT_NEQ(op1_vec, options.end());
-  ASSERT_NEQ(op3_vec, options.end());
+  ASSERT_NE(op53_vec, options.end());
+  ASSERT_NE(op51_vec, options.end());
+  ASSERT_NE(op54_vec, options.end());
+  ASSERT_NE(op1_vec, options.end());
+  ASSERT_NE(op3_vec, options.end());
 
   op53_vec.push_back(VALUE_53_ACKNOWLEDGE);
   ASSERT_EQ(op53_vec[0], VALUE_53_ACKNOWLEDGE);
 
   acknowledge_packet.pack_ip(op54_vec, SERVER_IP);
-  ASSERT_EQ(op54_vec.size(), SERVER_IP.size());
+  ASSERT_EQ(op54_vec.size(), PACK32_TO_8);
 
   acknowledge_packet.pack_time(op51_vec, LEASE_TIME);
-  ASSERT_EQ(op51_vec.size(), LEASE_TIME.size());
+  ASSERT_EQ(op51_vec.size(), PACK32_TO_8);
 
   acknowledge_packet.pack_ip(op1_vec, SERVER_MASK);
-  ASSERT_EQ(op1_vec.size(), LEASE_TIME.size());
+  ASSERT_EQ(op1_vec.size(), PACK32_TO_8);
 
   acknowledge_packet.pack_ip(op3_vec, GATEWAY_IP);
-  ASSERT_EQ(op3_vec.size(), GATEWAY_IP.size());
+  ASSERT_EQ(op3_vec.size(), PACK32_TO_8);
 }
