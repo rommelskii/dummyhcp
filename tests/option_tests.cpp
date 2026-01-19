@@ -22,8 +22,6 @@ TEST_F(PacketOptionsBuild, DhcpDiscoverTest) {
   //check option vectors exist
   auto op53_vec = options[OPTION_53];
   auto op55_vec = options[OPTION_55];
-  ASSERT_NE(op53_vec, options.end());
-  ASSERT_NE(op55_vec, options.end());
 
   //insert payload and check
   op53_vec.push_back(VALUE_53_DISCOVER);
@@ -56,13 +54,6 @@ TEST_F(PacketOptionsBuild, DhcpOfferTest) {
   auto op58_vec = options[OPTION_58];
   auto op59_vec = options[OPTION_59];
   auto op55_vec = options[OPTION_55];
-  ASSERT_NE(op53_vec, options.end());
-  ASSERT_NE(op54_vec, options.end());
-  ASSERT_NE(op51_vec, options.end());
-  ASSERT_NE(op58_vec, options.end());
-  ASSERT_NE(op59_vec, options.end());
-  ASSERT_NE(op55_vec, options.end());
-
 
   op53_vec.push_back(VALUE_53_OFFER);
   ASSERT_EQ(op53_vec[0], VALUE_53_OFFER);
@@ -105,11 +96,6 @@ TEST_F(PacketOptionsBuild, DhcpRequestTest) {
   auto op54_vec = options[OPTION_54];
   auto op55_vec = options[OPTION_55];
   auto op61_vec = options[OPTION_61];
-  ASSERT_NE(op53_vec, options.end());
-  ASSERT_NE(op50_vec, options.end());
-  ASSERT_NE(op54_vec, options.end());
-  ASSERT_NE(op55_vec, options.end());
-  ASSERT_NE(op61_vec, options.end());
 
   op53_vec.push_back(VALUE_53_REQUEST);
   ASSERT_EQ(op53_vec[0], VALUE_53_REQUEST);
@@ -150,11 +136,6 @@ TEST_F(PacketOptionsBuild, DhcpAcknowledgeTest) {
   auto op54_vec = options[OPTION_54];
   auto op1_vec = options[OPTION_1];
   auto op3_vec = options[OPTION_3];
-  ASSERT_NE(op53_vec, options.end());
-  ASSERT_NE(op51_vec, options.end());
-  ASSERT_NE(op54_vec, options.end());
-  ASSERT_NE(op1_vec, options.end());
-  ASSERT_NE(op3_vec, options.end());
 
   op53_vec.push_back(VALUE_53_ACKNOWLEDGE);
   ASSERT_EQ(op53_vec[0], VALUE_53_ACKNOWLEDGE);
