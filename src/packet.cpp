@@ -95,3 +95,21 @@ ssize_t dhcp_packet::deserialize(uint8_t buf[], size_t bytes_received) {
 
   return bytes_received;
 }
+
+void dhcp_packet::add_option(uint8_t option_number) {
+  this->options[option_number] = {};
+}
+
+void dhcp_packet::pack_ip(std::vector<uint8_t>& buffer, uint32_t ip) {
+  buffer.push_back(static_cast<uint8_t>((ip >> 24) & 0xFF)); 
+  buffer.push_back(static_cast<uint8_t>((ip >> 16) & 0xFF)); 
+  buffer.push_back(static_cast<uint8_t>((ip >> 8)  & 0xFF)); 
+  buffer.push_back(static_cast<uint8_t>(ip & 0xFF));         
+}
+
+void dhcp_packet::pack_time(std::vector<uint8_t>& buffer, uint32_t time) {
+  buffer.push_back(static_cast<uint8_t>((time >> 24) & 0xFF));
+  buffer.push_back(static_cast<uint8_t>((time >> 16) & 0xFF)); 
+  buffer.push_back(static_cast<uint8_t>((time >> 8)  & 0xFF));
+  buffer.push_back(static_cast<uint8_t>(time & 0xFF));
+}
