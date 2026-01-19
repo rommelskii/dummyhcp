@@ -165,7 +165,7 @@ TEST_F(PacketOptionsBuild, DhcpAcknowledgeTest) {
   acknowledge_packet.pack_time(op51_vec, LEASE_TIME);
   ASSERT_EQ(op51_vec.size(), LEASE_TIME.size());
 
-  acknowledge_packet.pack_ip(op51_vec, SERVER_MASK);
+  acknowledge_packet.pack_ip(op1_vec, SERVER_MASK);
   ASSERT_EQ(op1_vec.size(), LEASE_TIME.size());
 
   acknowledge_packet.pack_ip(op3_vec, GATEWAY_IP);
