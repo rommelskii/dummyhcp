@@ -60,6 +60,10 @@ public:
 
   ssize_t serialize(uint8_t buf[], size_t max_len);
   ssize_t deserialize(uint8_t buf[], size_t bytes_received);
+
+  void add_option(uint8_t option_number);
+  void pack_ip(std::vector<uint8_t>& buffer, uint32_t ip);
+  void pack_time(std::vector<uint8_t>& buffer, uint32_t time);
 };
  
 
