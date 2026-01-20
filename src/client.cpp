@@ -1,5 +1,6 @@
 #include <iostream>
 #include <gtest/gtest.h>
+#include "unistd.h"
 
 void dhcp_client::run_client() {
   //socket binding logic
@@ -40,5 +41,7 @@ void dhcp_client::run_client() {
         break;
     }
   }
+
+  close(sockfd);
 }
 
