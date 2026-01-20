@@ -21,6 +21,7 @@ public:
   uint32_t xid;
   uint32_t yiaddr;
   uint32_t siaddr;
+  uint32_t giaddr;
   uint32_t netmask;
   std::vector<uint8_t> mac;
   uint32_t lease_time;
@@ -35,6 +36,7 @@ public:
   uint32_t get_netmask();
   uint32_t get_yiaddr();
   uint32_t get_siaddr();
+  uint32_t get_giaddr();
 
   std::vector<uint8_t> get_mac();
 
@@ -48,6 +50,7 @@ public:
   void change_netmask(uint32_t new_netmask);
   void change_yiaddr(uint32_t new_yiaddr);
   void change_siaddr(uint32_t new_siaddr);
+  void change_giaddr(uint32_t new_giaddr);
   void change_mac(std::vector<uint8_t> new_mac);
   void change_lease_time(uint32_t new_lease_time);
   void change_renewal_time(uint32_t new_release_time);

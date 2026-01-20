@@ -39,6 +39,10 @@ uint32_t dhcp_client_context::get_siaddr() {
   return this->siaddr;
 }
 
+uint32_t dhcp_client_context::get_giaddr() {
+  return this->giaddr;
+}
+
 std::vector<uint8_t> dhcp_client_context::get_mac() {
   return this->mac;
 }
@@ -76,6 +80,10 @@ void dhcp_client_context::change_siaddr(uint32_t new_siaddr) {
   this->siaddr = new_siaddr;
 }
 
+void dhcp_client_context::change_giaddr(uint32_t new_giaddr) {
+  this->giaddr = new_giaddr;
+}
+
 void dhcp_client_context::change_mac(std::vector<uint8_t> new_mac) {
   this->mac = new_mac;
 }
@@ -100,9 +108,6 @@ uint32_t generate_xid() {
 }
 
 void dhcp_client_context::run_client() {
-  //socket binding logic
-  //all socket variables go here
-  const int DUMMYHCP_PORT = 8069;
   int sockfd = socket(AF_INET, SOCK_DGRAM, 0); 
   int broadcast_enable = 1;
 
@@ -127,6 +132,19 @@ void dhcp_client_context::run_client() {
     dhcp_state current_state = this->get_state();
     switch (current_state) {
       case dhcp_state::INIT:
+        std::vector<uint8_t> fake_mac = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
+        uint32_t session_xid = this->generate_xid();
+        uint8_t mac_buffer[16];
+        std::memset(mac_buffer, 0x00, 16);
+        for (int i=0; i<6; ++i) {
+          mac_buffer[i] = fake_mac[i];
+        }
+
+        dhcp_packet broadcast_discovery = dhcp_packet();
+        broadcast_discovery.build_header(BOOTREQUEST, session_xid, this->get_lease_time(), BROADCAST_FLAG,
+                                         this->get_ciaddr(), this->get_yiaddr(), this->get_siaddr(), this->get_giaddr(),
+                                         mac_buffer);
+
         break;
       case dhcp_state::SELECTING:
         break;
