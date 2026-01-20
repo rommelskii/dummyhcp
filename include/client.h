@@ -26,7 +26,7 @@ public:
   uint32_t renewal_time;
   uint32_t rebind_time;
   //constructors
-  ClientContext();
+  dhcp_client_context();
 
   //extractors
   int get_sockfd();
