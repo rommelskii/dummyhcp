@@ -29,7 +29,6 @@ public:
   dhcp_client_context();
 
   //extractors
-  int get_sockfd();
   dhcp_state get_state();
   uint32_t get_xid();
   uint32_t get_netmask();
