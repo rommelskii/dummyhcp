@@ -25,8 +25,6 @@ public:
   uint32_t lease_time;
   uint32_t renewal_time;
   uint32_t rebind_time;
-  int sockfd;
-
   //constructors
   ClientContext();
 
