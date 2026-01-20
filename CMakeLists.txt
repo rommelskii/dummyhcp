@@ -27,6 +27,7 @@ set(DHCP_TESTS
     header_tests 
     serialization_tests 
     option_tests
+    client_tests
 )
 
 foreach(test_name ${DHCP_TESTS})
