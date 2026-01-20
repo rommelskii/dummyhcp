@@ -128,24 +128,32 @@ void dhcp_client_context::run_client() {
     return;
   }
 
+  // client metadata
+  // note: replace these with actual syscall for extracting the relevant information
+  std::vector<uint8_t> fake_mac = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
+  uint32_t session_xid = this->generate_xid();
+  uint8_t mac_buffer[16];
+  std::memset(mac_buffer, 0x00, 16);
+  for (int i=0; i<6; ++i) {
+    mac_buffer[i] = fake_mac[i];
+  }
+
+  // packet buffer for serialization
+  uint8_t packet_buf[MAXLINE];
+  std::memset(packet_buf, 0x00, MAXLINE);
+
   //begin business logic
   while (true) {
     dhcp_state current_state = this->get_state();
     switch (current_state) {
       case dhcp_state::INIT:
-        std::vector<uint8_t> fake_mac = {0x69, 0x69, 0x69, 0x69, 0x69, 0x69};
-        uint32_t session_xid = this->generate_xid();
-        uint8_t mac_buffer[16];
-        std::memset(mac_buffer, 0x00, 16);
-        for (int i=0; i<6; ++i) {
-          mac_buffer[i] = fake_mac[i];
-        }
-
         dhcp_packet broadcast_discovery = dhcp_packet();
         broadcast_discovery.build_header(BOOTREQUEST, session_xid, this->get_lease_time(), BROADCAST_FLAG,
                                          this->get_ciaddr(), this->get_yiaddr(), this->get_siaddr(), this->get_giaddr(),
                                          mac_buffer);
-
+        broadcast_discovery.serialize(packet_buf, MAXLINE);
+        broadcast_discovery.preflight_order_change();
+        //ssize_t bytes_sent = sendto(sockfd, packet_buf, MAXLINE, 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
         break;
       case dhcp_state::SELECTING:
         break;
