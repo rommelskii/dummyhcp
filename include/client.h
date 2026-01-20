@@ -52,6 +52,8 @@ public:
   void change_rebind_time(uint32_t new_rebind_time);
 
   uint32_t generate_xid();
+
+  void run_client();
 }:
 
 
