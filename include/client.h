@@ -11,6 +11,7 @@
 */
 
 #include <iostream>
+#include <vector>
 #include "packet.h"
 
 
@@ -21,7 +22,7 @@ public:
   uint32_t yiaddr;
   uint32_t siaddr;
   uint32_t netmask;
-  uint8_t mac[6];
+  std::vector<uint8_t> mac;
   uint32_t lease_time;
   uint32_t renewal_time;
   uint32_t rebind_time;
@@ -34,7 +35,9 @@ public:
   uint32_t get_netmask();
   uint32_t get_yiaddr();
   uint32_t get_siaddr();
-  uint8_t* get_mac();
+
+  std::vector<uint8_t> get_mac();
+
   uint32_t get_lease_time();
   uint32_t get_renewal_time();
   uint32_t get_rebind_time();
@@ -45,7 +48,7 @@ public:
   void change_netmask(uint32_t new_netmask);
   void change_yiaddr(uint32_t new_yiaddr);
   void change_siaddr(uint32_t new_siaddr);
-  void change_mac(uint8_t* new_mac);
+  void change_mac(std::vector<uint8_t> new_mac);
   void change_lease_time(uint32_t new_lease_time);
   void change_renewal_time(uint32_t new_release_time);
   void change_rebind_time(uint32_t new_rebind_time);

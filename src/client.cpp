@@ -13,7 +13,7 @@ dhcp_client_context::dhcp_client_context() {
   this->yiaddr = inet_addr("0.0.0.0");
   this->siaddr = inet_addr("0.0.0.0");
   this->netmask = inet_addr("0.0.0.0");
-  std::memset(this->mac, 0, sizeof(this->mac));
+  this->mac = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   this->lease_time = 0x00;
   this->renewal_time = 0x00;
   this->rebind_time = 0x00;
@@ -39,7 +39,7 @@ uint32_t dhcp_client_context::get_siaddr() {
   return this->siaddr;
 }
 
-uint8_t* dhcp_client_context::get_mac() {
+std::vector<uint8_t> dhcp_client_context::get_mac() {
   return this->mac;
 }
 
@@ -76,8 +76,8 @@ void dhcp_client_context::change_siaddr(uint32_t new_siaddr) {
   this->siaddr = new_siaddr;
 }
 
-void dhcp_client_context::change_mac(uint8_t* new_mac) {
-  std::memcpy(this->mac, new_mac, sizeof(new_mac));
+void dhcp_client_context::change_mac(std::vector<uint8_t> new_mac) {
+  this->mac = new_mac;
 }
 
 void dhcp_client_context::change_lease_time(uint32_t new_lease_time) {
