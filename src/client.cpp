@@ -1,5 +1,4 @@
 #include <iostream>
-#include <gtest/gtest.h>
 #include <cstdint>
 #include <random>
 #include "unistd.h"
