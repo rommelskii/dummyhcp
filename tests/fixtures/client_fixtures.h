@@ -1,0 +1,61 @@
+
+#ifndef PACKET_FIXTURES_H
+#define PACKET_FIXTURES_H
+
+#include "packet.h"
+#include "client.h"
+#include <iostream>
+#include <arpa/inet.h>
+#include <gtest/gtest.h>
+
+class ClientContextBuild : public ::testing::Test {
+protected:
+  dhcp_client dc; 
+
+  const dhcp_state INITIAL_STATE = dhcp_state::INIT;
+  const uint32_t INITIAL_XID = 0x00;
+  const uint32_t INITIAL_YIADDR = inet_addr("0.0.0.0");
+  const uint32_t INITIAL_SIADDR = inet_addr("0.0.0.0");
+  const uint32_t INITIAL_NETMASK = inet_addr("0.0.0.0");
+  uint8_t INITIAL_MAC[6] = {0};
+  const uint32_t INITIAL_LEASE_TIME = 0x00;
+  const uint32_t INITIAL_RENEWAL_TIME = 0x00;
+  const uint32_t INITIAL_REBIND_TIME = 0x00;
+
+  void SetUp() override {
+    dc = dhcp_client();
+  }
+};
+
+/*
+class PacketHeaderBuild : public ::testing::Test {
+protected:
+  //header building 
+  dhcp_packet dp;
+  const uint8_t     op            = 1;     
+  const uint8_t     htype         = 1;   
+  const uint8_t     hlen          = 6;     
+  const uint8_t     hops          = 0;      
+  const uint32_t    xid           = 0xDEADBEEF;        
+  const uint16_t    secs          = 2600;        
+  const uint16_t    flags         = 0;       
+  const uint32_t    ciaddr        = inet_addr("1.0.0.0");      
+  const uint32_t    yiaddr        = inet_addr("0.1.0.0");    
+  const uint32_t    siaddr        = inet_addr("0.0.1.0");     
+  const uint32_t    giaddr        = inet_addr("192.168.100.69");      
+        uint8_t     chaddr[16]    = {0};   
+        uint8_t     sname[64]     = {0};     
+        uint8_t     file[128]     = {0};      
+  const uint32_t    magic_cookie  = 0x63825363;   //always
+
+  // preflight checks
+  const uint32_t net_xid = htonl(xid);
+  const uint16_t net_secs = htons(secs);
+  const uint16_t net_flags = htons(flags);
+  const uint32_t net_magic_cookie = htonl(magic_cookie);
+
+  void SetUp() override {
+    dp.build_header(op, xid, secs, flags, ciaddr, yiaddr, siaddr, giaddr, chaddr);
+  }
+};
+*/
