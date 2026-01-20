@@ -1,6 +1,6 @@
 
-#ifndef PACKET_FIXTURES_H
-#define PACKET_FIXTURES_H
+#ifnde CLIENT_FIXTURES_H 
+#define CLIENT_FIXTURES_H 
 
 #include "packet.h"
 #include "client.h"
@@ -59,3 +59,5 @@ protected:
   }
 };
 */
+
+#endif
