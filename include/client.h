@@ -53,7 +53,6 @@ public:
   uint32_t generate_xid();
 
   void run_client();
-  dhcp_packet process_packet();
 };
 
 
