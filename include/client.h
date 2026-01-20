@@ -32,6 +32,7 @@ public:
   int get_sockfd();
   dhcp_state get_state();
   uint32_t get_xid();
+  uint32_t get_netmask();
   uint32_t get_yiaddr();
   uint32_t get_siaddr();
   uint8_t* get_mac();
@@ -42,6 +43,7 @@ public:
   //mutators
   void change_state(dhcp_state new_state);
   void change_xid(uint32_t new_xid);
+  void change_netmask(uint32_t new_netmask);
   void change_yiaddr(uint32_t new_yiaddr);
   void change_siaddr(uint32_t new_siaddr);
   void change_mac(uint8_t* new_mac);
