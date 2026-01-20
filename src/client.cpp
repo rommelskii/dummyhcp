@@ -1,9 +1,23 @@
 #include <iostream>
 #include <cstdint>
 #include <random>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 #include "unistd.h"
+#include "client.h"
 
-dhcp_client_context();
+dhcp_client_context::dhcp_client_context() {
+  this->state = dhcp_state::INIT;
+  this->xid = 0x00;
+  this->netmask = inet_addr("0.0.0.0");
+  this->yiaddr = inet_addr("0.0.0.0");
+  this->siaddr = inet_addr("0.0.0.0");
+  this->netmask = inet_addr("0.0.0.0");
+  std::memset(this->mac, 0, sizeof(this->mac));
+  this->lease_time = 0x00;
+  this->renewal_time = 0x00;
+  this->rebind_time = 0x00;
+}
 
 dhcp_state dhcp_client_context::get_state() {
   return this->state;
@@ -70,11 +84,11 @@ void dhcp_client_context::change_lease_time(uint32_t new_lease_time) {
   this->lease_time = new_lease_time;
 }
 
-void dhcp_client_context::change_renewal_time(uint32_t new_release_time) {
-  this->release_time = new_release_time;
+void dhcp_client_context::change_renewal_time(uint32_t new_renewal_time) {
+  this->renewal_time = new_renewal_time;
 }
 
-void change_rebind_time(uint32_t new_rebind_time) {
+void dhcp_client_context::change_rebind_time(uint32_t new_rebind_time) {
   this->rebind_time = new_rebind_time;
 }
 

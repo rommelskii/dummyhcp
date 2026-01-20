@@ -4,7 +4,10 @@ project(dhcp VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(dhcp_core OBJECT src/packet.cpp)
+add_library(dhcp_core OBJECT 
+            src/packet.cpp
+            src/client.cpp
+            )
 target_include_directories(dhcp_core PUBLIC include src)
 
 add_executable(dhcp src/main.cpp)
