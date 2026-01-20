@@ -11,6 +11,16 @@
 #include <unordered_map>
 #include <vector>
 
+#define DUMMYHCP_PORT 8069
+#define BOOTREQUEST 1
+#define BOOTREPLY 2
+#define ETHERNET 1
+#define HADDR_LENGTH 6
+#define UNICAST_FLAG 0
+#define BROADCAST_FLAG 1
+
+#define MAXLINE 1500
+
 /**
  * dhcp_header
  *
