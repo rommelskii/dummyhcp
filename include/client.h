@@ -14,6 +14,47 @@
 #include "packet.h"
 
 
+class ClientContext {
+public:
+  dhcp_state state;
+  uint32_t xid;
+  uint32_t yiaddr;
+  uint32_t siaddr;
+  uint32_t netmask;
+  uint8_t mac[6];
+  uint32_t lease_time;
+  uint32_t renewal_time;
+  uint32_t rebind_time;
+  int sockfd;
 
-#endif DHCP_PACKET_H
+  //constructors
+  ClientContext();
+
+  //extractors
+  int get_sockfd();
+  dhcp_state get_state();
+  uint32_t get_xid();
+  uint32_t get_yiaddr();
+  uint32_t get_siaddr();
+  uint8_t* get_mac();
+  uint32_t get_lease_time();
+  uint32_t get_renewal_time();
+  uint32_t get_rebind_time();
+
+  //mutators
+  void change_state(dhcp_state new_state);
+  void change_xid(uint32_t new_xid);
+  void change_yiaddr(uint32_t new_yiaddr);
+  void change_siaddr(uint32_t new_siaddr);
+  void change_mac(uint8_t* new_mac);
+  void change_lease_time(uint32_t new_lease_time);
+  void change_renewal_time(uint32_t new_release_time);
+  void change_rebind_time(uint32_t new_rebind_time);
+
+  uint32_t generate_xid();
+}:
+
+
+
+#endif 
 
