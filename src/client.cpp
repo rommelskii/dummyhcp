@@ -12,6 +12,7 @@ dhcp_client_context::dhcp_client_context() {
   this->netmask = inet_addr("0.0.0.0");
   this->yiaddr = inet_addr("0.0.0.0");
   this->siaddr = inet_addr("0.0.0.0");
+  this->giaddr = inet_addr("0.0.0.0");
   this->netmask = inet_addr("0.0.0.0");
   this->mac = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   this->lease_time = 0x00;
