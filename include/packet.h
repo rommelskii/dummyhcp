@@ -72,6 +72,6 @@ enum class dhcp_state {
   REQUESTING,
   BOUND,
   RENEWING
-}
+};
 
 #endif 
