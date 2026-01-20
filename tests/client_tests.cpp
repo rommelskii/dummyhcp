@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "client.h"
+#include "client_fixtures.h"
 #include "packet.h"
 
 TESTF(ClientContextBuild, ConstructorTest) {
