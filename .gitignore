@@ -1,0 +1,59 @@
+# =========================================
+# 1. CMake & Build Artifacts
+# =========================================
+# Ignore the entire build directory (assuming you name it 'build')
+# This catches all .cmake, .obj, .o, .a, .so, and binaries.
+build/
+bin/
+out/
+
+# In case you accidentally run an "in-source" build
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeFiles/CMakeConfigureLog.yaml
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+_deps/
+CTestTestfile.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+
+# =========================================
+# 2. Compiled Binaries and Libraries
+# =========================================
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+
+# =========================================
+# 3. IDE Specific Files
+# =========================================
+# CLion
+.idea/
+cmake-build-*/
+
+# VS Code
+.vscode/
+.history/
+
+# Visual Studio
+.vs/
+Debug/
+Release/
+x64/
+
+# =========================================
+# 4. OS Specific Files
+# =========================================
+.DS_Store
+Thumbs.db
+
+manifests/

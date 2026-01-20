@@ -4,21 +4,13 @@ project(dhcp VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#DummyHCP proper
-set(SOURCES
-    src/main.cpp
-    src/packet.cpp
-)
-add_executable(dhcp ${SOURCES})
-target_include_directories(dhcp PRIVATE 
-    include    
-    src       
-)
-set_target_properties(dhcp PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+add_library(dhcp_core OBJECT src/packet.cpp)
+target_include_directories(dhcp_core PUBLIC include src)
 
-#GTest 
+add_executable(dhcp src/main.cpp)
+target_link_libraries(dhcp PRIVATE dhcp_core)
+set_target_properties(dhcp PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -28,77 +20,19 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(
-  initialization_tests 
-  tests/initialization_tests.cpp
-  src/packet.cpp
-)
-add_executable(
-  header_tests
-  tests/header_tests.cpp
-  src/packet.cpp
-)
-add_executable(
-  serialization_tests 
-  tests/serialization_tests.cpp
-  src/packet.cpp
-)
-add_executable(
-  option_tests 
-  tests/option_tests.cpp
-  src/packet.cpp
-)
-target_include_directories(initialization_tests PRIVATE 
-    tests/fixtures
-    include    
-    src       
-)
-target_include_directories(header_tests PRIVATE 
-    tests/fixtures
-    include    
-    src       
-)
-target_include_directories(serialization_tests PRIVATE 
-    tests/fixtures
-    include    
-    src       
-)
-target_include_directories(option_tests PRIVATE 
-    tests/fixtures
-    include    
-    src       
-)
-target_link_libraries(
-  initialization_tests 
-  GTest::gtest_main
-)
-target_link_libraries(
-  header_tests
-  GTest::gtest_main
-)
-target_link_libraries(
-  serialization_tests 
-  GTest::gtest_main
-)
-target_link_libraries(
-  option_tests 
-  GTest::gtest_main
-)
-set_target_properties(initialization_tests PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-)
-set_target_properties(header_tests PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-)
-set_target_properties(serialization_tests PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-)
-set_target_properties(option_tests PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-)
 include(GoogleTest)
-gtest_discover_tests(initialization_tests)
-gtest_discover_tests(header_tests)
-gtest_discover_tests(serialization_tests)
-gtest_discover_tests(option_tests)
 
+set(DHCP_TESTS 
+    initialization_tests 
+    header_tests 
+    serialization_tests 
+    option_tests
+)
+
+foreach(test_name ${DHCP_TESTS})
+    add_executable(${test_name} tests/${test_name}.cpp)
+    target_link_libraries(${test_name} PRIVATE dhcp_core GTest::gtest_main)
+    target_include_directories(${test_name} PRIVATE tests/fixtures include src)
+    set_target_properties(${test_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
+    gtest_discover_tests(${test_name})
+endforeach()
