@@ -3,21 +3,21 @@
 #include "client_fixtures.h"
 #include "packet.h"
 
-TESTF(ClientContextBuild, ConstructorTest) {
+TEST_F(ClientContextBuild, ConstructorTest) {
   ASSERT_EQ(dc.state, INITIAL_STATE);  
   ASSERT_EQ(dc.xid, INITIAL_XID);  
   ASSERT_EQ(dc.yiaddr, INITIAL_YIADDR);  
   ASSERT_EQ(dc.siaddr, INITIAL_SIADDR);  
   ASSERT_EQ(dc.netmask, INITIAL_NETMASK);  
-  for (int i=0; i<sizeof(INITIAL_NETMASK); ++i) {
-    ASSERT_EQ(dc.mac[i], INITIAL_NETMASK[i]));
+  for (int i=0; i<sizeof(INITIAL_MAC); ++i) {
+    ASSERT_EQ(dc.mac[i], INITIAL_MAC[i]);
   }
   ASSERT_EQ(dc.lease_time, INITIAL_LEASE_TIME);  
   ASSERT_EQ(dc.renewal_time, INITIAL_RENEWAL_TIME);  
   ASSERT_EQ(dc.rebind_time, INITIAL_REBIND_TIME);  
 }
 
-TESTF(ClientContextBuild, GetterTest) {
+TEST_F(ClientContextBuild, GetterTest) {
   ASSERT_EQ(dc.get_state(), INITIAL_STATE);  
   ASSERT_EQ(dc.get_xid(), INITIAL_XID);  
   ASSERT_EQ(dc.get_yiaddr(), INITIAL_YIADDR);  
@@ -35,7 +35,7 @@ TESTF(ClientContextBuild, GetterTest) {
   ASSERT_EQ(dc.get_rebind_time(), INITIAL_REBIND_TIME);  
 }
 
-TESTF(ClientContextBuild, MutatorTest) {
+TEST_F(ClientContextBuild, MutatorTest) {
   const dhcp_state NEW_STATE = dhcp_state::SELECTING;
   const uint32_t NEW_XID = 0x69696969;
   const uint32_t NEW_YIADDR = inet_addr("192.168.0.23");
@@ -61,13 +61,13 @@ TESTF(ClientContextBuild, MutatorTest) {
   ASSERT_EQ(dc.siaddr, NEW_SIADDR);  
   ASSERT_EQ(dc.netmask, NEW_NETMASK);  
   for (int i=0; i<sizeof(NEW_MAC); ++i) {
-    ASSERT_EQ(dc.mac[i], NEW_MAC[i]));
+    ASSERT_EQ(dc.mac[i], NEW_MAC[i]);
   }
   ASSERT_EQ(dc.lease_time, NEW_LEASE_TIME);  
   ASSERT_EQ(dc.renewal_time, NEW_RENEWAL_TIME);  
   ASSERT_EQ(dc.rebind_time, NEW_REBIND_TIME);  
 }
 
-TESTF(ClientContextBuild, OperationalTest) {
+TEST_F(ClientContextBuild, OperationalTest) {
   
 }
