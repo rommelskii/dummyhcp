@@ -14,7 +14,7 @@
 #include "packet.h"
 
 
-class ClientContext {
+class dhcp_client_context {
 public:
   dhcp_state state;
   uint32_t xid;
