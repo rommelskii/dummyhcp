@@ -10,7 +10,7 @@
 
 class ClientContextBuild : public ::testing::Test {
 protected:
-  dhcp_client dc; 
+  dhcp_client_context dc; 
 
   const dhcp_state INITIAL_STATE = dhcp_state::INIT;
   const uint32_t INITIAL_XID = 0x00;
