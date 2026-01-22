@@ -18,6 +18,8 @@ dhcp_client_context::dhcp_client_context() {
   this->lease_time = 0x00;
   this->renewal_time = 0x00;
   this->rebind_time = 0x00;
+  
+  std::memset(this->packet_buf, 0x00, MAXLINE);
 }
 
 dhcp_state dhcp_client_context::get_state() {
@@ -138,9 +140,6 @@ void dhcp_client_context::run_client() {
     mac_buffer[i] = fake_mac[i];
   }
 
-  // packet buffer for serialization
-  uint8_t packet_buf[MAXLINE];
-  std::memset(packet_buf, 0x00, MAXLINE);
 
   //begin business logic
   while (true) {
@@ -150,28 +149,31 @@ void dhcp_client_context::run_client() {
         // perform broadcast
         dhcp_packet broadcast_discovery;
         this->build_client_header(broadcast_discovery);
-        this->perform_broadcast(broadcast_discovery, packet_buf);
+        this->perform_broadcast(broadcast_discovery);
         // transition
         this->change_state(dhcp_state::SELECTING);
         break;
       case dhcp_state::SELECTING:
         // receive offer
         dhcp_packet offer_reply;
-        this->receive_offer(offer_reply, packet_buf);
+        this->receive_offer(offer_reply);
+
         // verify first reply it receives
         if (this->validate_offer(offer_reply) == 0) {
           std::cerr << "Error: malformed offer reply";
           this->change_state(dhcp_state::INIT);
         }
+
         // receive data from offer
         this->unpack_offer(offer_reply);
+
         // transition
         this->change_state(dhcp_state::REQUESTING);
         break;
       case dhcp_state::REQUESTING:
         // submit data to specified server in recent DHCPOFFER 
         dhcp_packet server_request;
-        this->perform_request(server_request, packet_buf);
+        this->perform_request(server_request);
         // await acknowledge reply and validate
         dhcp_packet ack_reply;
         this->receive_acknowledge(ack_reply);

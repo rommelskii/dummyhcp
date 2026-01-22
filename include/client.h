@@ -27,6 +27,9 @@ public:
   uint32_t lease_time;
   uint32_t renewal_time;
   uint32_t rebind_time;
+
+  //packet buffer
+  uint8_t packet_buf;
   //constructors
   dhcp_client_context();
 
@@ -59,6 +62,9 @@ public:
   uint32_t generate_xid();
 
   void run_client();
+
+  void build_client_header(dhcp_packet discovery_packet);
+  void perform_broadcast(dhcp_packet discovery_packet);
 };
 
 

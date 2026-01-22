@@ -12,6 +12,9 @@ TEST_F(ClientContextBuild, ConstructorTest) {
   for (int i=0; i<sizeof(INITIAL_MAC); ++i) {
     ASSERT_EQ(dc.mac[i], INITIAL_MAC[i]);
   }
+  for (int i=0; i<MAXLINE; ++i) {
+    ASSERT_EQ(dc.packet_buf[i], 0);
+  }
   ASSERT_EQ(dc.lease_time, INITIAL_LEASE_TIME);  
   ASSERT_EQ(dc.renewal_time, INITIAL_RENEWAL_TIME);  
   ASSERT_EQ(dc.rebind_time, INITIAL_REBIND_TIME);  
