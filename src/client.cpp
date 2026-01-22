@@ -147,21 +147,23 @@ void dhcp_client_context::run_client() {
     dhcp_state current_state = this->get_state();
     switch (current_state) {
       case dhcp_state::INIT:
-        dhcp_packet broadcast_discovery = dhcp_packet();
-        broadcast_discovery.build_header(BOOTREQUEST, session_xid, this->get_lease_time(), BROADCAST_FLAG,
-                                         this->get_ciaddr(), this->get_yiaddr(), this->get_siaddr(), this->get_giaddr(),
-                                         mac_buffer);
-        broadcast_discovery.serialize(packet_buf, MAXLINE);
-        broadcast_discovery.preflight_order_change();
-        //ssize_t bytes_sent = sendto(sockfd, packet_buf, MAXLINE, 0, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        // perform broadcast
+        // transition
         break;
       case dhcp_state::SELECTING:
+        // verify first reply it receives
+        // receive data from offer
         break;
       case dhcp_state::REQUESTING:
+        // submit data to specified server in recent DHCPOFFER 
+        // await reply and validate
+        // transition to BOUND
         break;
       case dhcp_state::BOUND:
+        // apply to clientside 
         break;
       case dhcp_state::RENEWING:
+        // insert renewal logic here
         break;
     }
   }
