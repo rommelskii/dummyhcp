@@ -145,7 +145,7 @@ void dhcp_client_context::run_client() {
   while (true) {
     dhcp_state current_state = this->get_state();
     switch (current_state) {
-      case dhcp_state::INIT:
+      case dhcp_state::INIT: {
         // perform broadcast
         dhcp_packet broadcast_discovery;
         this->build_client_header(broadcast_discovery);
@@ -153,7 +153,8 @@ void dhcp_client_context::run_client() {
         // transition
         this->change_state(dhcp_state::SELECTING);
         break;
-      case dhcp_state::SELECTING:
+      }
+      case dhcp_state::SELECTING: {
         // receive offer
         dhcp_packet offer_reply;
         this->receive_offer(offer_reply);
@@ -170,7 +171,8 @@ void dhcp_client_context::run_client() {
         // transition
         this->change_state(dhcp_state::REQUESTING);
         break;
-      case dhcp_state::REQUESTING:
+      }
+      case dhcp_state::REQUESTING: {
         // submit data to specified server in recent DHCPOFFER 
         dhcp_packet server_request;
         this->perform_request(server_request);
@@ -184,13 +186,15 @@ void dhcp_client_context::run_client() {
         // transition to BOUND
         this->change_state(dhcp_state::BOUND);
         break;
-      case dhcp_state::BOUND:
+      }
+      case dhcp_state::BOUND: {
         // apply to clientside 
         this->bind_ip();
         break;
       case dhcp_state::RENEWING:
         // insert renewal logic here
         break;
+      }
     }
   }
 

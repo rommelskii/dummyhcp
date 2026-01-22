@@ -64,7 +64,20 @@ public:
   void run_client();
 
   void build_client_header(dhcp_packet discovery_packet);
+
+  void receive_offer(dhcp_packet offer_packet);
+  void receive_acknowledge(dhcp_packet acknowledge_packet);
+
+  int validate_offer(dhcp_packet offer_packet);
+  int validate_acknowledge(dhcp_packet acknowledge_packet);
+
   void perform_broadcast(dhcp_packet discovery_packet);
+  void perform_request(dhcp_packet request_packet);
+
+  void unpack_offer(dhcp_packet offer_packet);
+
+
+  void bind_ip();
 };
 
 
