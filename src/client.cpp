@@ -103,7 +103,7 @@ void dhcp_client_context::change_rebind_time(uint32_t new_rebind_time) {
   this->rebind_time = new_rebind_time;
 }
 
-uint32_t generate_xid() {
+uint32_t dhcp_client_context::generate_xid() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<uint32_t> dis(0, 0xFFFFFFFF);
@@ -199,4 +199,40 @@ void dhcp_client_context::run_client() {
   }
 
   close(sockfd);
+}
+
+void dhcp_client_context::build_client_header(dhcp_packet discovery_packet) {
+  return;
+}
+
+void dhcp_client_context::receive_offer(dhcp_packet offer_packet) {
+  return;
+}
+
+void dhcp_client_context::receive_acknowledge(dhcp_packet acknowledge_packet) {
+  return;
+}
+
+int dhcp_client_context::validate_offer(dhcp_packet offer_packet) {
+  return -1;
+}
+
+int dhcp_client_context::validate_acknowledge(dhcp_packet acknowledge_packet) {
+  return -1;
+}
+
+void dhcp_client_context::perform_broadcast(dhcp_packet discovery_packet) {
+  return;
+}
+
+void dhcp_client_context::perform_request(dhcp_packet request_packet) {
+  return;
+}
+
+void dhcp_client_context::unpack_offer(dhcp_packet offer_packet) {
+  return;
+}
+
+void dhcp_client_context::bind_ip() {
+  return;
 }
