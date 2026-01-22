@@ -29,7 +29,7 @@ public:
   uint32_t rebind_time;
 
   //packet buffer
-  uint8_t packet_buf;
+  uint8_t packet_buf[MAXLINE];
   //constructors
   dhcp_client_context();
 
