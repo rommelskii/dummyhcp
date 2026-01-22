@@ -171,7 +171,7 @@ void dhcp_client_context::run_client() {
       case dhcp_state::REQUESTING:
         // submit data to specified server in recent DHCPOFFER 
         dhcp_packet server_request;
-        this->perform_request(server_request);
+        this->perform_request(server_request, packet_buf);
         // await acknowledge reply and validate
         dhcp_packet ack_reply;
         this->receive_acknowledge(ack_reply);
