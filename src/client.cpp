@@ -148,19 +148,43 @@ void dhcp_client_context::run_client() {
     switch (current_state) {
       case dhcp_state::INIT:
         // perform broadcast
+        dhcp_packet broadcast_discovery;
+        this->build_client_header(broadcast_discovery);
+        this->perform_broadcast(broadcast_discovery, packet_buf);
         // transition
+        this->change_state(dhcp_state::SELECTING);
         break;
       case dhcp_state::SELECTING:
+        // receive offer
+        dhcp_packet offer_reply;
+        this->receive_offer(offer_reply, packet_buf);
         // verify first reply it receives
+        if (this->validate_offer(offer_reply) == 0) {
+          std::cerr << "Error: malformed offer reply";
+          this->change_state(dhcp_state::INIT);
+        }
         // receive data from offer
+        this->unpack_offer(offer_reply);
+        // transition
+        this->change_state(dhcp_state::REQUESTING);
         break;
       case dhcp_state::REQUESTING:
         // submit data to specified server in recent DHCPOFFER 
-        // await reply and validate
+        dhcp_packet server_request;
+        this->perform_request(server_request);
+        // await acknowledge reply and validate
+        dhcp_packet ack_reply;
+        this->receive_acknowledge(ack_reply);
+        if (this->validate_acknowledge(ack_reply) == 0) {
+          std::cerr << "Error: malformed acknowledge reply";
+          this->change_state(dhcp_state::INIT);
+        }
         // transition to BOUND
+        this->change_state(dhcp_state::BOUND);
         break;
       case dhcp_state::BOUND:
         // apply to clientside 
+        this->bind_ip();
         break;
       case dhcp_state::RENEWING:
         // insert renewal logic here
