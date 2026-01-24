@@ -8,7 +8,9 @@ TEST_F(ClientContextBuild, ConstructorTest) {
   ASSERT_EQ(dc.xid, INITIAL_XID);  
   ASSERT_EQ(dc.yiaddr, INITIAL_YIADDR);  
   ASSERT_EQ(dc.siaddr, INITIAL_SIADDR);  
+  ASSERT_EQ(dc.ciaddr, INITIAL_CIADDR);  
   ASSERT_EQ(dc.netmask, INITIAL_NETMASK);  
+  ASSERT_EQ(dc.server_id, INITIAL_SERVER_ID);  
   for (int i=0; i<sizeof(INITIAL_MAC); ++i) {
     ASSERT_EQ(dc.mac[i], INITIAL_MAC[i]);
   }
@@ -25,7 +27,9 @@ TEST_F(ClientContextBuild, GetterTest) {
   ASSERT_EQ(dc.get_xid(), INITIAL_XID);  
   ASSERT_EQ(dc.get_yiaddr(), INITIAL_YIADDR);  
   ASSERT_EQ(dc.get_siaddr(), INITIAL_SIADDR);  
+  ASSERT_EQ(dc.get_ciaddr(), INITIAL_CIADDR);  
   ASSERT_EQ(dc.get_netmask(), INITIAL_NETMASK);  
+  ASSERT_EQ(dc.get_netmask(), INITIAL_SERVER_ID);  
 
   std::vector<uint8_t> client_mac = dc.get_mac();
   for (int i=0; i<sizeof(client_mac); ++i) {
@@ -42,6 +46,7 @@ TEST_F(ClientContextBuild, MutatorTest) {
   const uint32_t NEW_XID = 0x69696969;
   const uint32_t NEW_YIADDR = inet_addr("192.168.0.23");
   const uint32_t NEW_SIADDR = inet_addr("192.168.0.10");
+  const uint32_t NEW_CIADDR = inet_addr("0.0.0.0");
   const uint32_t NEW_NETMASK = inet_addr("255.255.255.0");
   std::vector<uint8_t> NEW_MAC = {0x04, 0xFF, 0x69, 0x22, 0x12, 0x53};
   const uint32_t NEW_LEASE_TIME = 86400;
@@ -52,6 +57,7 @@ TEST_F(ClientContextBuild, MutatorTest) {
   dc.change_xid(NEW_XID);
   dc.change_yiaddr(NEW_YIADDR);
   dc.change_siaddr(NEW_SIADDR);
+  dc.change_ciaddr(NEW_CIADDR);
   dc.change_netmask(NEW_NETMASK);
   dc.change_lease_time(NEW_LEASE_TIME);
   dc.change_renewal_time(NEW_RENEWAL_TIME);

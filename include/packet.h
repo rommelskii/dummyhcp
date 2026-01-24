@@ -74,6 +74,8 @@ public:
   void add_option(uint8_t option_number);
   void pack_ip(std::vector<uint8_t>& buffer, uint32_t ip);
   void pack_time(std::vector<uint8_t>& buffer, uint32_t time);
+  void unpack_ip(std::vector<uint8_t>& buffer, uint32_t& ip);
+  void unpack_time(std::vector<uint8_t>& buffer, uint32_t& time);
 };
  
 enum class dhcp_state {

@@ -107,9 +107,35 @@ void dhcp_packet::pack_ip(std::vector<uint8_t>& buffer, uint32_t ip) {
   buffer.push_back(static_cast<uint8_t>(ip & 0xFF));         
 }
 
+
 void dhcp_packet::pack_time(std::vector<uint8_t>& buffer, uint32_t time) {
   buffer.push_back(static_cast<uint8_t>((time >> 24) & 0xFF));
   buffer.push_back(static_cast<uint8_t>((time >> 16) & 0xFF)); 
   buffer.push_back(static_cast<uint8_t>((time >> 8)  & 0xFF));
   buffer.push_back(static_cast<uint8_t>(time & 0xFF));
+}
+
+void dhcp_packet::unpack_ip(std::vector<uint8_t>& buffer, uint32_t& ip) {
+  if (buffer.size() != 4) {
+    std::cerr << "ip unpacking error: buffer does not contain 4 octets";
+    return; 
+  }
+  ip = (static_cast<uint32_t>(buffer[0]) << 24) |
+    (static_cast<uint32_t>(buffer[1]) << 16) |
+    (static_cast<uint32_t>(buffer[2]) << 8)  |
+    (static_cast<uint32_t>(buffer[3]));
+  return;
+}
+
+void dhcp_packet::unpack_time(std::vector<uint8_t>& buffer, uint32_t& time) {
+  if (buffer.size() != 4) {
+    std::cerr << "time unpacking error: buffer does not contain 4 bytes";
+    return; 
+  }
+  time = (static_cast<uint32_t>(buffer[0]) << 24) |
+    (static_cast<uint32_t>(buffer[1]) << 16) |
+    (static_cast<uint32_t>(buffer[2]) << 8)  |
+    (static_cast<uint32_t>(buffer[3]));
+  return;
+
 }

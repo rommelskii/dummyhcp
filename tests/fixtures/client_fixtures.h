@@ -16,7 +16,9 @@ protected:
   const uint32_t INITIAL_XID = 0x00;
   const uint32_t INITIAL_YIADDR = inet_addr("0.0.0.0");
   const uint32_t INITIAL_SIADDR = inet_addr("0.0.0.0");
+  const uint32_t INITIAL_CIADDR = inet_addr("0.0.0.0");
   const uint32_t INITIAL_NETMASK = inet_addr("0.0.0.0");
+  const uint32_t INITIAL_SERVER_ID = inet_addr("0.0.0.0");
   std::vector<uint8_t> INITIAL_MAC = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   const uint32_t INITIAL_LEASE_TIME = 0x00;
   const uint32_t INITIAL_RENEWAL_TIME = 0x00;
